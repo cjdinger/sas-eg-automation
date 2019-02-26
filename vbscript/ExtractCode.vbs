@@ -10,6 +10,7 @@
 ' within the project
 ' The internal nodes are output to the SAS file, concatenated 
 ' and sorted in alpha-numeric order by node name
+' Process Flows with no nodes produce no SAS files 
 '
 ' This script uses the Scripting.FileSystemObject to save the code, 
 ' _which_WILL_NOT_ include
@@ -200,7 +201,7 @@ Function SortArrayList_ByName(ByVal array_)
     Set SortArrayList_ByName = array_
 End Function
 
-'Clean characters from string, that might cause problems when executing SAS code
+'Clean characters from string...
 Function strClean(inString)
   dim outString
   dim thisChar
@@ -209,7 +210,9 @@ Function strClean(inString)
   for i=1 to len(inString)
     thisChar=mid(inString,i,1)
     Select Case thisChar
-      Case ";", "'", """", "&", "%", "*"
+      Case ";", "'", """", "&", "%", "*" 'strings that might cause problems when executing SAS code
+        thisChar=" "
+      Case "<", ">", "|", "/", "\"       'string, that might cause problems whilst saving files
         thisChar=" "
     end Select
     outString=outString+thisChar
